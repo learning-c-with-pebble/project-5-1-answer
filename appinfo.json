@@ -4,6 +4,7 @@
         ""
     ],
     "companyName": "jipping+c@hope.edu",
+    "enableMultiJS": false,
     "longName": "Project 5.1",
     "projectType": "native",
     "resources": {

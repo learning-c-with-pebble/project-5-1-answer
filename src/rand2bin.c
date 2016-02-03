@@ -1,8 +1,15 @@
+//----------------------------------------------------------------------------------
+//
+// Project 5.1 from "Programming Pebble in C"
+// 
+// Allan Findlay with Mike Jipping, February 2016
+
 #include <pebble.h>
 
 Window *window;
 int16_t random_number;
 
+// Display a decimal number at (x,y) using the graphics context ctx
 void display_number(int number, int x, int y, GContext *ctx) {
  	GRect decimal_box = (GRect){ .origin = {.x = x, .y = y}, .size = {.w = 144, .h = 30}};
 	char decimal_string[32];
@@ -12,6 +19,7 @@ void display_number(int number, int x, int y, GContext *ctx) {
                        decimal_box, GTextOverflowModeWordWrap, GTextAlignmentCenter, NULL);
 }
 
+// Display a bit at (x,y) using the graphics context ctx
 void display_bit(int bit, int x, int y, GContext *ctx) {
  	GRect bit_box = (GRect){ .origin = {.x = x, .y = y}, .size = {.w = 8, .h = 30}};
 	char bit_string[2];
@@ -21,13 +29,18 @@ void display_bit(int bit, int x, int y, GContext *ctx) {
                        bit_box, GTextOverflowModeWordWrap, GTextAlignmentCenter, NULL);
 }
 
+// This function displays a random number, then its binary equivalent
 void update_display(struct Layer *layer, GContext *ctx)	{
 	graphics_context_set_text_color(ctx, GColorBlack);
 
     display_number(random_number, 0, 20, ctx);
     
+    // Start with the random_number and with X coordinate on the right of the screen
 	int number = random_number;
 	int x = 124;
+    
+    // For 16 bits, extract the rightmost bit with an AND and shift the number
+    // Be sure to decrement the X coordinate
 	for (int bit = 0; bit < 16; ++bit) {
 		if (number & 1)
             display_bit(1,x,60,ctx);
@@ -38,6 +51,8 @@ void update_display(struct Layer *layer, GContext *ctx)	{
 		number >>= 1;
     }
 }
+
+//----------------------------------------------------------------------
 
 void handle_init(void) {
 	srand(time(NULL));
